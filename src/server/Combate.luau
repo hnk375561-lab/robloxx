@@ -4,6 +4,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
+local Misiones = require(script.Parent.Misiones)
 local Paredes = require(script.Parent.Paredes)
 
 local Combate = {}
@@ -60,7 +61,9 @@ function Combate.iniciar()
 
 		for _, vecino in workspace:GetPartBoundsInRadius(parte.Position, radio, filtro) do
 			if CollectionService:HasTag(vecino, "Voxel") then
-				Paredes.danar(vecino, dano)
+				if Paredes.danar(vecino, dano) then
+					Misiones.sumar(jugador, 1)
+				end
 			end
 		end
 	end)

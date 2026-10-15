@@ -32,6 +32,10 @@ return {
 		{ nombre = "Maza de cristal", precio = 40000, dano = 9 },
 	},
 
+	-- Misiones infinitas: la mision N pide MISION_META * N cubitos y paga MISION_PREMIO * N monedas
+	MISION_META = 40,
+	MISION_PREMIO = 150,
+
 	-- Renacer (prestigio): reinicia todo pero da un multiplicador de monedas para siempre
 	FUERZA_PARA_RENACER = 10,
 	BONUS_POR_RENACER = 0.5, -- cada renacer suma +50% de monedas

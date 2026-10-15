@@ -54,7 +54,7 @@ function Paredes.danar(voxel, dano)
 	vida -= dano
 	if vida <= 0 then
 		romper(voxel)
-		return
+		return true
 	end
 	voxel:SetAttribute("Vida", vida)
 	local vidaMax = voxel:GetAttribute("VidaMax")

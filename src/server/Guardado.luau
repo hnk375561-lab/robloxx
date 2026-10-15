@@ -82,6 +82,8 @@ local function cargar(jugador)
 		)
 		jugador:SetAttribute("Racha", numeroSeguro(datos.racha, 0, 365, 0))
 		jugador:SetAttribute("Arma", numeroSeguro(datos.arma, 1, #Config.ARMAS, 1))
+		jugador:SetAttribute("Mision", numeroSeguro(datos.mision, 1, 100000, 1))
+		jugador:SetAttribute("MisionProgreso", numeroSeguro(datos.misionProgreso, 0, 1000000000, 0))
 		jugador:SetAttribute("BoostHasta", numeroSeguro(datos.boostHasta, 0, 4102444800, 0))
 	end
 	jugador:SetAttribute("DatosCargados", true)
@@ -112,6 +114,8 @@ local function guardar(jugador)
 		ultimaRecompensa = jugador:GetAttribute("UltimaRecompensa") or 0,
 		racha = jugador:GetAttribute("Racha") or 0,
 		arma = jugador:GetAttribute("Arma") or 1,
+		mision = jugador:GetAttribute("Mision") or 1,
+		misionProgreso = jugador:GetAttribute("MisionProgreso") or 0,
 		boostHasta = jugador:GetAttribute("BoostHasta") or 0,
 	}
 	local ok, errorTexto = conReintentos(function()
