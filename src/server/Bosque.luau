@@ -1,4 +1,4 @@
--- Genera el bosque: pisos, arboles, flores, rocas, luciernagas, bordes y paredes.
+-- Genera el bosque: terreno, arboles, flores, hongos, rocas, luciernagas, bordes y paredes.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Config = require(ReplicatedStorage.Shared.Config)
@@ -12,19 +12,26 @@ local ALTO = Config.ALTO_PARED
 local GROSOR = Config.GROSOR_PARED
 local PUERTA = Config.ANCHO_PUERTA
 
-local COLOR_TRONCO = Color3.fromRGB(105, 75, 45)
+local COLOR_TRONCO = Color3.fromRGB(98, 70, 44)
 local COLOR_ARBUSTO = Color3.fromRGB(40, 90, 40)
 local COLOR_PARED = Color3.fromRGB(170, 120, 70)
+local COLOR_MUSGO = Color3.fromRGB(78, 120, 56)
 local COLORES_HOJAS = {
 	Color3.fromRGB(60, 120, 50),
 	Color3.fromRGB(80, 140, 55),
 	Color3.fromRGB(45, 105, 60),
+	Color3.fromRGB(100, 150, 50),
 }
 local COLORES_FLORES = {
 	Color3.fromRGB(255, 220, 80),
 	Color3.fromRGB(255, 255, 255),
 	Color3.fromRGB(240, 120, 180),
 	Color3.fromRGB(150, 170, 255),
+}
+local COLORES_HONGO = {
+	Color3.fromRGB(200, 55, 45),
+	Color3.fromRGB(215, 140, 60),
+	Color3.fromRGB(170, 90, 140),
 }
 
 local function elegir(lista, azar)
@@ -60,6 +67,22 @@ local function crearBola(nombre, diametro, posicion, color, material, carpeta)
 	return bola
 end
 
+-- Cilindro parado (vertical)
+local function crearCilindro(nombre, largo, diametro, posicion, color, material, carpeta)
+	local cilindro = crearParte(
+		nombre,
+		Vector3.new(diametro, largo, diametro),
+		posicion,
+		color,
+		material,
+		carpeta
+	)
+	cilindro.Shape = Enum.PartType.Cylinder
+	cilindro.Size = Vector3.new(largo, diametro, diametro)
+	cilindro.CFrame = CFrame.new(posicion) * CFrame.Angles(0, 0, math.rad(90))
+	return cilindro
+end
+
 -- Centro de la habitacion (i, j). La habitacion (1, 1) esta en el origen.
 local function centroHabitacion(i, j)
 	return Vector3.new((i - 1) * T, 0, (j - 1) * T)
@@ -72,30 +95,98 @@ local function signoAlAzar(azar)
 	return 1
 end
 
--- El pasto se oscurece a medida que te alejas del inicio
-local function colorPiso(profundidad)
-	local oscuro = (profundidad - 1) / (2 * N - 2)
-	return Color3.fromRGB(95, 150, 65):Lerp(Color3.fromRGB(45, 90, 40), oscuro)
+local function materialPiso(profundidad)
+	if profundidad <= 2 then
+		return Enum.Material.LeafyGrass
+	elseif profundidad <= 5 then
+		return Enum.Material.Grass
+	end
+	return Enum.Material.Mud
 end
 
-local function crearArbol(posicion, carpeta, azar)
-	local alto = azar:NextInteger(7, 11)
-	crearParte(
-		"Tronco",
-		Vector3.new(2, alto, 2),
-		posicion + Vector3.new(0, alto / 2, 0),
+-- Terreno base: suelo enorme alrededor y colinas lejanas para que se sienta un bosque
+local function prepararTerreno()
+	local terreno = workspace.Terrain
+	terreno:Clear()
+	terreno:SetMaterialColor(Enum.Material.Grass, Color3.fromRGB(96, 146, 64))
+	terreno:SetMaterialColor(Enum.Material.LeafyGrass, Color3.fromRGB(106, 156, 70))
+	terreno:SetMaterialColor(Enum.Material.Mud, Color3.fromRGB(86, 66, 48))
+	terreno:SetMaterialColor(Enum.Material.Ground, Color3.fromRGB(102, 84, 60))
+	pcall(function()
+		terreno.Decoration = true
+	end)
+
+	local centro = (N - 1) * T / 2
+	terreno:FillBlock(CFrame.new(centro, -4, centro), Vector3.new(520, 8, 520), Enum.Material.Grass)
+
+	local colinas = Random.new(7)
+	for k = 1, 18 do
+		local angulo = (k / 18) * math.pi * 2 + colinas:NextNumber(-0.1, 0.1)
+		local distancia = colinas:NextNumber(175, 205)
+		local radio = colinas:NextNumber(26, 42)
+		local lugar = Vector3.new(
+			centro + math.cos(angulo) * distancia,
+			-8,
+			centro + math.sin(angulo) * distancia
+		)
+		local material = Enum.Material.Grass
+		if k % 2 == 0 then
+			material = Enum.Material.LeafyGrass
+		end
+		terreno:FillBall(lugar, radio, material)
+	end
+end
+
+local function crearArbol(posicion, carpeta, azar, escala)
+	local alto = azar:NextInteger(8, 12) * escala
+	local ancho = 2.4 * escala
+
+	crearCilindro(
+		"Base",
+		1.2 * escala,
+		ancho * 1.5,
+		posicion + Vector3.new(0, 0.6 * escala, 0),
 		COLOR_TRONCO,
 		Enum.Material.Wood,
 		carpeta
 	)
-	local color = elegir(COLORES_HOJAS, azar)
-	local tamanos = { 10, 8, 6 }
-	for k, tamano in tamanos do
-		local desvio = Vector3.new(azar:NextInteger(-1, 1), (k - 1) * 3.5, azar:NextInteger(-1, 1))
+	crearCilindro(
+		"Tronco",
+		alto * 0.65,
+		ancho,
+		posicion + Vector3.new(0, alto * 0.325, 0),
+		COLOR_TRONCO,
+		Enum.Material.Wood,
+		carpeta
+	)
+	crearCilindro(
+		"Tronco",
+		alto * 0.5,
+		ancho * 0.7,
+		posicion + Vector3.new(0, alto * 0.75, 0),
+		COLOR_TRONCO,
+		Enum.Material.Wood,
+		carpeta
+	)
+
+	local colorA = elegir(COLORES_HOJAS, azar)
+	local colorB = elegir(COLORES_HOJAS, azar)
+	local grupos = {
+		{ Vector3.new(0, 2, 0), 11 },
+		{ Vector3.new(3.5, -0.5, 1), 8 },
+		{ Vector3.new(-3, -1, -2), 8.5 },
+		{ Vector3.new(1, -1.5, -3.5), 7 },
+		{ Vector3.new(0.5, 5, 0.5), 7 },
+	}
+	for k, grupo in grupos do
+		local color = colorA
+		if k % 2 == 0 then
+			color = colorB
+		end
 		crearBola(
 			"Hojas",
-			tamano,
-			posicion + Vector3.new(0, alto, 0) + desvio,
+			grupo[2] * escala,
+			posicion + Vector3.new(0, alto, 0) + grupo[1] * escala,
 			color,
 			Enum.Material.Grass,
 			carpeta
@@ -104,15 +195,15 @@ local function crearArbol(posicion, carpeta, azar)
 end
 
 local function crearFlor(posicion, carpeta, azar)
-	crearParte(
+	local tallo = crearParte(
 		"Tallo",
 		Vector3.new(0.2, 1, 0.2),
 		posicion + Vector3.new(0, 0.5, 0),
 		Color3.fromRGB(50, 110, 40),
 		Enum.Material.Grass,
 		carpeta
-	).CanCollide =
-		false
+	)
+	tallo.CanCollide = false
 	crearBola(
 		"Flor",
 		0.9,
@@ -134,6 +225,54 @@ local function crearRoca(posicion, carpeta, azar)
 		carpeta
 	)
 	roca.CFrame = roca.CFrame * CFrame.Angles(0, math.rad(azar:NextInteger(0, 180)), 0)
+end
+
+local function crearHongo(posicion, carpeta, azar)
+	local escala = azar:NextNumber(0.8, 1.6)
+	local tallo = crearCilindro(
+		"TalloHongo",
+		1.2 * escala,
+		0.5 * escala,
+		posicion + Vector3.new(0, 0.6 * escala, 0),
+		Color3.fromRGB(235, 225, 205),
+		Enum.Material.SmoothPlastic,
+		carpeta
+	)
+	tallo.CanCollide = false
+	crearBola(
+		"SombreroHongo",
+		1.7 * escala,
+		posicion + Vector3.new(0, 1.3 * escala, 0),
+		elegir(COLORES_HONGO, azar),
+		Enum.Material.SmoothPlastic,
+		carpeta
+	)
+end
+
+local function crearTroncoCaido(posicion, carpeta, azar)
+	local largo = azar:NextNumber(6, 9)
+	local centro = posicion + Vector3.new(0, 0.9, 0)
+	local tronco = crearParte(
+		"TroncoCaido",
+		Vector3.new(largo, 1.8, 1.8),
+		centro,
+		COLOR_TRONCO,
+		Enum.Material.Wood,
+		carpeta
+	)
+	tronco.Shape = Enum.PartType.Cylinder
+	tronco.CFrame = CFrame.new(centro) * CFrame.Angles(0, math.rad(azar:NextInteger(0, 180)), 0)
+
+	local musgo = crearParte(
+		"Musgo",
+		Vector3.new(largo * 0.6, 0.3, 1.1),
+		centro,
+		COLOR_MUSGO,
+		Enum.Material.Grass,
+		carpeta
+	)
+	musgo.CFrame = tronco.CFrame * CFrame.new(0, 0.85, 0)
+	musgo.CanCollide = false
 end
 
 -- Una zona invisible que suelta puntitos de luz amarilla flotando
@@ -170,31 +309,40 @@ end
 
 local function crearHabitacion(i, j, carpeta, azar)
 	local centro = centroHabitacion(i, j)
-	crearParte(
-		"Piso",
-		Vector3.new(T, 1, T),
-		centro + Vector3.new(0, -0.5, 0),
-		colorPiso(i + j - 1),
-		Enum.Material.Grass,
-		carpeta
+
+	-- Piso de terreno real (la superficie queda en Y = 0)
+	workspace.Terrain:FillBlock(
+		CFrame.new(centro + Vector3.new(0, -4, 0)),
+		Vector3.new(T, 8, T),
+		materialPiso(i + j - 1)
 	)
 
-	-- Arboles lejos de las puertas del centro
+	-- Todo lo decorativo queda lejos de las puertas del centro
 	for _ = 1, 4 do
 		local dx = azar:NextInteger(8, 15) * signoAlAzar(azar)
 		local dz = azar:NextInteger(8, 15) * signoAlAzar(azar)
-		crearArbol(centro + Vector3.new(dx, 0, dz), carpeta, azar)
+		crearArbol(centro + Vector3.new(dx, 0, dz), carpeta, azar, 1)
 	end
-	for _ = 1, 10 do
-		local dx = azar:NextNumber(-17, 17)
-		local dz = azar:NextNumber(-17, 17)
-		crearFlor(centro + Vector3.new(dx, 0, dz), carpeta, azar)
+	for _ = 1, 12 do
+		crearFlor(
+			centro + Vector3.new(azar:NextNumber(-17, 17), 0, azar:NextNumber(-17, 17)),
+			carpeta,
+			azar
+		)
 	end
-	for _ = 1, 2 do
+	for _ = 1, 4 do
+		local dx = azar:NextInteger(5, 16) * signoAlAzar(azar)
+		local dz = azar:NextInteger(5, 16) * signoAlAzar(azar)
+		crearHongo(centro + Vector3.new(dx, 0, dz), carpeta, azar)
+	end
+	for _ = 1, 3 do
 		local dx = azar:NextInteger(6, 16) * signoAlAzar(azar)
 		local dz = azar:NextInteger(6, 16) * signoAlAzar(azar)
 		crearRoca(centro + Vector3.new(dx, 0, dz), carpeta, azar)
 	end
+	local lx = azar:NextInteger(9, 15) * signoAlAzar(azar)
+	local lz = azar:NextInteger(9, 15) * signoAlAzar(azar)
+	crearTroncoCaido(centro + Vector3.new(lx, 0, lz), carpeta, azar)
 	crearLuciernagas(centro + Vector3.new(0, 6, 0), carpeta)
 end
 
@@ -293,6 +441,8 @@ function Bosque.generar()
 		spawnViejo:Destroy()
 	end
 
+	prepararTerreno()
+
 	local carpeta = Instance.new("Folder")
 	carpeta.Name = "Bosque"
 	carpeta.Parent = workspace
@@ -310,6 +460,15 @@ function Bosque.generar()
 			if j < N then
 				crearDivision(carpeta, centro + Vector3.new(0, 0, T / 2), false, i + j - 1, azar)
 			end
+		end
+	end
+
+	-- Bosque denso fuera de la arena (se ven las copas por encima de los muros)
+	for _ = 1, 80 do
+		local x = azar:NextNumber(-150, 270)
+		local z = azar:NextNumber(-150, 270)
+		if x < -32 or x > 152 or z < -32 or z > 152 then
+			crearArbol(Vector3.new(x, 0, z), carpeta, azar, 1.6)
 		end
 	end
 

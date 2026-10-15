@@ -62,3 +62,9 @@ Este archivo es la memoria del proyecto. Claude debe leerlo al empezar cada sesi
 - Al romperse, el voxel pasa a Workspace.Fragmentos (con fisica). Fragmentos.luau los atrae hacia el jugador (iman automatico) y los convierte en Items. Maximo 300 fragmentos, desaparecen a los 90 s.
 - Numeros de balance viven en src/shared/Config.luau.
 - Pendiente: sonidos (necesitan IDs del Creator Store), grietas con texturas (necesitan IDs), manos con arte mejor, guardado de progreso.
+## Decision sobre el arte (assets)
+- Se intento cargar modelos del Creator Store con InsertService:LoadAsset y dio "User is not authorized to access Asset": la cuenta tiene que "obtener" el asset primero. Claude no puede ver la pagina del Creator Store (carga con JavaScript) ni inventar IDs.
+- Por ahora TODO el arte es procedural (codigo): terreno de Roblox, arboles, hongos, rocas, puestos, brazos del viewmodel, HUD. No hay sonidos ni musica todavia (requieren IDs de audio que la cuenta pueda usar).
+- Si mas adelante se consiguen IDs validos, se integran desde un modulo nuevo (por ejemplo src/server/Assets.luau).
+- Para leer errores sin la ventana Output de Studio, se lee el registro en %LOCALAPPDATA%\Roblox\logs (ultimo archivo *Studio*.log).
+- Mejora visual 2: terreno real (Terrain), bosque denso fuera de la arena, forja con fuego y Trueque con toldo, brazos con nudillos/manga, numeros de dano flotantes, HUD con panel.
