@@ -17,6 +17,14 @@ function Fragmentos.agregar(parte, valor)
 	end
 end
 
+-- El Game Pass del iman duplica el alcance
+local function radioIman(jugador)
+	if jugador:GetAttribute("PaseIman") then
+		return Config.RADIO_IMAN * 2
+	end
+	return Config.RADIO_IMAN
+end
+
 local function posicionesDeJugadores()
 	local resultado = {}
 	for _, jugador in Players:GetPlayers() do
@@ -67,7 +75,7 @@ function Fragmentos.iniciar()
 					end
 					parte:Destroy()
 					table.remove(lista, i)
-				elseif mejor and mejorDistancia < Config.RADIO_IMAN and edad > 0.6 then
+				elseif mejor and mejorDistancia < radioIman(mejor.jugador) and edad > 0.6 then
 					local direccion = (mejor.posicion - parte.Position).Unit
 					parte.AssemblyLinearVelocity = direccion * 60
 				end

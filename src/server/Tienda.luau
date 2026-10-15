@@ -399,7 +399,9 @@ local function venderItems(jugador)
 		return false
 	end
 	stats.Items.Value = 0
-	stats.Monedas.Value += cantidad * Config.PRECIO_ITEM
+	stats.Monedas.Value += math.floor(
+		cantidad * Config.PRECIO_ITEM * Jugadores.multiplicadorMonedas(jugador)
+	)
 	return true
 end
 

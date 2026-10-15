@@ -1,8 +1,10 @@
--- Guardado del progreso (items, monedas y fuerza) con DataStore.
+-- Guardado del progreso con DataStore.
 -- En Studio hace falta: Game Settings > Security > "Enable Studio Access to API Services"
 -- y haber publicado el juego al menos una vez. Si falla, el juego sigue andando igual.
 local DataStoreService = game:GetService("DataStoreService")
 local Players = game:GetService("Players")
+
+local Recompensa = require(script.Parent.Recompensa)
 
 local Guardado = {}
 
@@ -70,8 +72,16 @@ local function cargar(jugador)
 		stats.Items.Value = numeroSeguro(datos.items, 0, 1000000000, 0)
 		stats.Monedas.Value = numeroSeguro(datos.monedas, 0, 1000000000, 0)
 		jugador:SetAttribute("Fuerza", numeroSeguro(datos.fuerza, 1, 100000, 1))
+		jugador:SetAttribute("Renacimientos", numeroSeguro(datos.renacimientos, 0, 100000, 0))
+		jugador:SetAttribute(
+			"UltimaRecompensa",
+			numeroSeguro(datos.ultimaRecompensa, 0, 4102444800, 0)
+		)
+		jugador:SetAttribute("Racha", numeroSeguro(datos.racha, 0, 365, 0))
+		jugador:SetAttribute("BoostHasta", numeroSeguro(datos.boostHasta, 0, 4102444800, 0))
 	end
 	jugador:SetAttribute("DatosCargados", true)
+	Recompensa.revisar(jugador)
 end
 
 local function guardar(jugador)
@@ -94,6 +104,10 @@ local function guardar(jugador)
 		items = stats.Items.Value,
 		monedas = stats.Monedas.Value,
 		fuerza = jugador:GetAttribute("Fuerza") or 1,
+		renacimientos = jugador:GetAttribute("Renacimientos") or 0,
+		ultimaRecompensa = jugador:GetAttribute("UltimaRecompensa") or 0,
+		racha = jugador:GetAttribute("Racha") or 0,
+		boostHasta = jugador:GetAttribute("BoostHasta") or 0,
 	}
 	local ok, errorTexto = conReintentos(function()
 		almacen:SetAsync(clave(jugador), datos)
@@ -102,6 +116,11 @@ local function guardar(jugador)
 		avisar(errorTexto)
 	end
 	enCurso[jugador] = nil
+end
+
+-- Para guardar ya mismo (por ejemplo despues de una compra con Robux)
+function Guardado.guardarYa(jugador)
+	task.spawn(guardar, jugador)
 end
 
 function Guardado.iniciar()
