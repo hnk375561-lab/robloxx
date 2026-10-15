@@ -9,6 +9,7 @@ local UserInputService = game:GetService("UserInputService")
 
 local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
 local remoto = ReplicatedStorage:WaitForChild("Golpear")
+local Sonidos = require(script.Parent:WaitForChild("Sonidos"))
 
 local jugador = Players.LocalPlayer
 local camara = workspace.CurrentCamera
@@ -189,6 +190,7 @@ local function golpear()
 	manos[proximaMano].golpe = 1
 	proximaMano = if proximaMano == 1 then 2 else 1
 	sacudida = 1.5
+	Sonidos.golpe()
 
 	local resultado = objetivo()
 	if resultado then
@@ -196,6 +198,7 @@ local function golpear()
 		chispas(resultado.Position, resultado.Instance.Color)
 		numeroFlotante(resultado.Position, "-" .. tostring(jugador:GetAttribute("Fuerza") or 1))
 		fovExtra = 3.5
+		Sonidos.impacto()
 	end
 end
 

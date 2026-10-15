@@ -9,6 +9,8 @@ local jugador = Players.LocalPlayer
 local camara = workspace.CurrentCamera
 local esCelular = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 
+local Sonidos = require(script.Parent:WaitForChild("Sonidos"))
+
 local fragmentos = workspace:WaitForChild("Fragmentos")
 
 local function ancla(posicion)
@@ -37,6 +39,7 @@ local function destelloCristal(posicion, color)
 		activos -= 1
 	end)
 
+	Sonidos.cristal()
 	local punto = ancla(posicion)
 
 	local emisor = Instance.new("ParticleEmitter")
@@ -86,7 +89,30 @@ fragmentos.ChildRemoved:Connect(function(parte)
 	if raiz and parte:IsA("BasePart") and (raiz.Position - parte.Position).Magnitude < 6 then
 		puntoRecoger.Position = parte.Position
 		brilloRecoger:Emit(3)
+		Sonidos.recoger()
 	end
+end)
+
+-- ====== Sonidos de monedas y de mejora de fuerza ======
+task.spawn(function()
+	local stats = jugador:WaitForChild("leaderstats")
+	local monedas = stats:WaitForChild("Monedas")
+	local fuerza = stats:WaitForChild("Fuerza")
+	local ultimasMonedas = monedas.Value
+	local ultimaFuerza = fuerza.Value
+
+	monedas.Changed:Connect(function(nuevo)
+		if nuevo > ultimasMonedas then
+			Sonidos.moneda()
+		end
+		ultimasMonedas = nuevo
+	end)
+	fuerza.Changed:Connect(function(nuevo)
+		if nuevo > ultimaFuerza then
+			Sonidos.mejora()
+		end
+		ultimaFuerza = nuevo
+	end)
 end)
 
 -- ====== Linterna suave que sigue la camara (solo PC) ======

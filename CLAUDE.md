@@ -81,3 +81,10 @@ Este archivo es la memoria del proyecto. Claude debe leerlo al empezar cada sesi
 - Suelo.luau (servidor): tierra y barro bajo cada arbol, parches de tierra/barro/musgo en cada habitacion (FillCylinder sobre la capa superior del terreno).
 - Viento.client.luau: las copas (Hojas) y arbustos (Matas) se mecen con BulkMoveTo a 20 veces por segundo, solo en PC.
 - Efectos.client.luau: chispas y flash al romper cristales Neon, destello dorado al recoger fragmentos, linterna suave pegada a la camara (solo PC).
+
+
+## Mejora 5
+- Guardado.luau (servidor): DataStore "RobloxxProgreso_v1" guarda items, monedas y fuerza (al salir, cada 120 s y al cerrar el servidor). Solo guarda si pudo leer antes (DatosCargados) para no pisar progreso. En Studio hay que activar Game Settings > Security > Enable Studio Access to API Services y publicar una vez.
+- Flora.luau (servidor): helechos, tocones y hojas caidas por habitacion; ademas pone CanQuery=false a adornos chicos (flores, hongos, hojas, matas) para que no tapen el rayo de golpes.
+- Sonidos.luau (cliente, ModuleScript): sonidos rbxasset:// que vienen con el cliente de Roblox. Prueba cada archivo candidato y usa el primero que carga; si ninguno, queda en silencio sin error. Golpe.client.luau llama a Sonidos.golpe() y Sonidos.impacto().
+- Efectos.client.luau ahora tambien suena (cristal, recoger, monedas, mejora de fuerza).
