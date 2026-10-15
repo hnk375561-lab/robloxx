@@ -2,6 +2,12 @@
   "name": "robloxx",
   "tree": {
     "$className": "DataModel",
+    "Lighting": {
+      "$className": "Lighting",
+      "$properties": {
+        "Technology": "Future"
+      }
+    },
     "ServerScriptService": {
       "$className": "ServerScriptService",
       "Server": {

@@ -68,3 +68,10 @@ Este archivo es la memoria del proyecto. Claude debe leerlo al empezar cada sesi
 - Si mas adelante se consiguen IDs validos, se integran desde un modulo nuevo (por ejemplo src/server/Assets.luau).
 - Para leer errores sin la ventana Output de Studio, se lee el registro en %LOCALAPPDATA%\Roblox\logs (ultimo archivo *Studio*.log).
 - Mejora visual 2: terreno real (Terrain), bosque denso fuera de la arena, forja con fuego y Trueque con toldo, brazos con nudillos/manga, numeros de dano flotantes, HUD con panel.
+
+## Mejora visual 3 (direccion elegida: estilizado limpio + brillo magico, liviano para celulares)
+- Ambiente.luau reescrito: Sky, Clouds, GlobalWind, hora dorada con ciclo lento, color mas rico.
+- Magia.luau (servidor): hongos y flores que brillan (Neon + algunas PointLight), cristales Neon en 6% de los voxeles (valen +1), rayos de luz (Beam) con polvo, hojas cayendo. CanQuery=false en las zonas invisibles de luciernagas para no tapar golpes.
+- Pulido.client.luau: vineta con 4 bordes en degradado, enfoque automatico (DepthOfField), modo liviano en celulares (sin SunRays ni DoF).
+- default.project.json: Lighting.Technology = Future. Si Rojo no lo aplica en vivo, ponerlo una vez a mano en Studio (Lighting > Technology).
+- Sigue sin haber sonidos ni modelos del Creator Store (hay que elegir IDs de audio de creador Roblox y 'Obtener' los modelos con la cuenta).
