@@ -47,11 +47,20 @@ function Combate.iniciar()
 		if type(fuerza) ~= "number" then
 			fuerza = 1
 		end
-		local radio = math.min(Config.RADIO_AREA + 0.35 * (fuerza - 1), 6)
+		-- El dano ya incluye el arma y los pases (lo calcula Jugadores.luau)
+		local dano = jugador:GetAttribute("Dano")
+		if type(dano) ~= "number" then
+			dano = fuerza
+		end
+		local arma = jugador:GetAttribute("Arma")
+		if type(arma) ~= "number" then
+			arma = 1
+		end
+		local radio = math.min(Config.RADIO_AREA + 0.35 * (fuerza - 1) + 0.15 * (arma - 1), 6)
 
 		for _, vecino in workspace:GetPartBoundsInRadius(parte.Position, radio, filtro) do
 			if CollectionService:HasTag(vecino, "Voxel") then
-				Paredes.danar(vecino, fuerza)
+				Paredes.danar(vecino, dano)
 			end
 		end
 	end)
