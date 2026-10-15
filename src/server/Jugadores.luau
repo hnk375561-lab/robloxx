@@ -24,6 +24,13 @@ function Jugadores.multiplicadorMonedas(jugador)
 	if boostHasta > os.time() then
 		total *= 2
 	end
+	-- Evento dorado: x2 para todo el servidor mientras dura
+	if (workspace:GetAttribute("EventoHasta") or 0) > os.time() then
+		total *= 2
+	end
+	if jugador.MembershipType == Enum.MembershipType.Premium then
+		total *= Config.BONUS_PREMIUM
+	end
 	return total
 end
 
@@ -49,6 +56,11 @@ end
 
 local function actualizarMultiplicador(jugador)
 	jugador:SetAttribute("Multiplicador", Jugadores.multiplicadorMonedas(jugador))
+end
+
+-- Para que otros modulos refresquen el multiplicador mostrado (por ejemplo al empezar un evento)
+function Jugadores.refrescar(jugador)
+	actualizarMultiplicador(jugador)
 end
 
 local function actualizarDano(jugador)

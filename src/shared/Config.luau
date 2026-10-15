@@ -36,6 +36,20 @@ return {
 	MISION_META = 40,
 	MISION_PREMIO = 150,
 
+	-- Retencion: regalos por tiempo jugado (minutos desde que entras) y evento dorado
+	REGALOS = {
+		{ minutos = 2, monedas = 100 },
+		{ minutos = 5, monedas = 300 },
+		{ minutos = 10, monedas = 800 },
+		{ minutos = 20, monedas = 2000 },
+		{ minutos = 30, monedas = 4000 },
+		{ minutos = 60, monedas = 10000 },
+	},
+	EVENTO_PRIMERO = 120, -- segundos hasta el primer evento dorado del servidor
+	EVENTO_CADA = 480, -- segundos entre eventos dorados
+	EVENTO_DURACION = 60, -- cuanto dura el x2 de monedas para todos
+	BONUS_PREMIUM = 1.2, -- multiplicador de monedas para jugadores con Roblox Premium
+
 	-- Renacer (prestigio): reinicia todo pero da un multiplicador de monedas para siempre
 	FUERZA_PARA_RENACER = 10,
 	BONUS_POR_RENACER = 0.5, -- cada renacer suma +50% de monedas
