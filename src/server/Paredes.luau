@@ -16,12 +16,12 @@ carpetaFragmentos.Name = "Fragmentos"
 carpetaFragmentos.Parent = workspace
 
 local PALETA = {
-	Color3.fromRGB(122, 118, 110),
-	Color3.fromRGB(104, 100, 94),
-	Color3.fromRGB(134, 112, 86),
-	Color3.fromRGB(92, 96, 88),
+	Color3.fromRGB(140, 134, 122),
+	Color3.fromRGB(122, 117, 107),
+	Color3.fromRGB(152, 126, 96),
+	Color3.fromRGB(110, 114, 102),
 }
-local COLOR_MUSGO = Color3.fromRGB(80, 118, 60)
+local COLOR_MUSGO = Color3.fromRGB(98, 144, 68)
 
 function Paredes.carpeta()
 	return carpetaVoxeles

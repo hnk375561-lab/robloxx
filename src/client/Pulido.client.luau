@@ -29,17 +29,17 @@ local function borde(posicion, tamano, giro)
 	local degradado = Instance.new("UIGradient")
 	degradado.Rotation = giro
 	degradado.Transparency = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 0.55),
+		NumberSequenceKeypoint.new(0, 0.82),
 		NumberSequenceKeypoint.new(1, 1),
 	})
 	degradado.Parent = marco
 	marco.Parent = pantalla
 end
 
-borde(UDim2.fromScale(0, 0), UDim2.fromScale(1, 0.22), 90)
-borde(UDim2.fromScale(0, 0.78), UDim2.fromScale(1, 0.22), -90)
-borde(UDim2.fromScale(0, 0), UDim2.fromScale(0.18, 1), 0)
-borde(UDim2.fromScale(0.82, 0), UDim2.fromScale(0.18, 1), 180)
+borde(UDim2.fromScale(0, 0), UDim2.fromScale(1, 0.12), 90)
+borde(UDim2.fromScale(0, 0.88), UDim2.fromScale(1, 0.12), -90)
+borde(UDim2.fromScale(0, 0), UDim2.fromScale(0.1, 1), 0)
+borde(UDim2.fromScale(0.9, 0), UDim2.fromScale(0.1, 1), 180)
 
 -- ====== Modo liviano en celulares ======
 if esCelular then

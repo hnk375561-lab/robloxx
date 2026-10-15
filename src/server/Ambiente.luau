@@ -37,15 +37,15 @@ end
 local function crearLuz()
 	ajustar(Lighting, "ClockTime", 17.2)
 	ajustar(Lighting, "GeographicLatitude", 25)
-	ajustar(Lighting, "Brightness", 3)
-	ajustar(Lighting, "Ambient", Color3.fromRGB(60, 68, 70))
-	ajustar(Lighting, "OutdoorAmbient", Color3.fromRGB(105, 112, 105))
+	ajustar(Lighting, "Brightness", 2.6)
+	ajustar(Lighting, "Ambient", Color3.fromRGB(88, 96, 98))
+	ajustar(Lighting, "OutdoorAmbient", Color3.fromRGB(128, 136, 128))
 	ajustar(Lighting, "ColorShift_Top", Color3.fromRGB(255, 200, 130))
 	ajustar(Lighting, "GlobalShadows", true)
-	ajustar(Lighting, "ShadowSoftness", 0.25)
+	ajustar(Lighting, "ShadowSoftness", 0.15)
 	ajustar(Lighting, "EnvironmentDiffuseScale", 1)
 	ajustar(Lighting, "EnvironmentSpecularScale", 1)
-	ajustar(Lighting, "ExposureCompensation", 0.2)
+	ajustar(Lighting, "ExposureCompensation", 0.1)
 end
 
 local function crearCielo()
@@ -67,33 +67,33 @@ end
 
 local function crearEfectos()
 	local niebla = Instance.new("Atmosphere")
-	niebla.Density = 0.34
-	niebla.Offset = 0.25
+	niebla.Density = 0.26
+	niebla.Offset = 0.1
 	niebla.Color = Color3.fromRGB(200, 205, 185)
 	niebla.Decay = Color3.fromRGB(120, 130, 90)
 	niebla.Glare = 0.25
-	niebla.Haze = 1.6
+	niebla.Haze = 0.9
 	niebla.Parent = Lighting
 
 	local brillo = Instance.new("BloomEffect")
-	brillo.Intensity = 0.5
-	brillo.Size = 22
-	brillo.Threshold = 1.1
+	brillo.Intensity = 0.3
+	brillo.Size = 18
+	brillo.Threshold = 1.3
 	brillo.Parent = Lighting
 
 	local color = Instance.new("ColorCorrectionEffect")
-	color.Saturation = 0.3
-	color.Contrast = 0.12
+	color.Saturation = 0.2
+	color.Contrast = 0.08
 	color.TintColor = Color3.fromRGB(255, 244, 228)
 	color.Parent = Lighting
 
 	local rayos = Instance.new("SunRaysEffect")
-	rayos.Intensity = 0.18
+	rayos.Intensity = 0.08
 	rayos.Spread = 0.8
 	rayos.Parent = Lighting
 
 	local profundidad = Instance.new("DepthOfFieldEffect")
-	profundidad.FarIntensity = 0.3
+	profundidad.FarIntensity = 0.12
 	profundidad.FocusDistance = 60
 	profundidad.InFocusRadius = 40
 	profundidad.NearIntensity = 0

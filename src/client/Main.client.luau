@@ -171,9 +171,9 @@ jugador:GetAttributeChangedSignal("CostoFuerza"):Connect(actualizar)
 local ayuda = Instance.new("TextLabel")
 ayuda.AnchorPoint = Vector2.new(0, 1)
 ayuda.Position = UDim2.new(0, 16, 1, -16)
-ayuda.Size = UDim2.fromOffset(330, 24)
+ayuda.Size = UDim2.fromOffset(560, 24)
 ayuda.BackgroundTransparency = 1
-ayuda.Text = "Clic: golpear   |   E (mantener): usar puestos"
+ayuda.Text = "Clic: golpear  |  E (mantener): puestos  |  G: graficos  |  M: sonido"
 ayuda.TextXAlignment = Enum.TextXAlignment.Left
 ayuda.TextColor3 = Color3.fromRGB(235, 235, 225)
 ayuda.TextSize = 16

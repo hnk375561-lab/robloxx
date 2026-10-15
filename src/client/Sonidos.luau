@@ -1,34 +1,59 @@
 -- Sonidos con archivos que ya vienen dentro de Roblox (no hacen falta IDs ni permisos).
--- Si alguno no existe en tu version de Roblox, simplemente no suena y no rompe nada.
+-- Todos pasan por un grupo con volumen general, ecualizador y limitador de picos.
+-- Tecla M: silenciar / activar.
 local ContentProvider = game:GetService("ContentProvider")
 local Debris = game:GetService("Debris")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
+local UserInputService = game:GetService("UserInputService")
+
+local Config = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild("Config"))
 
 local Sonidos = {}
+
+-- Grupo general: aca se controla que tan fuerte suena todo
+local grupo = Instance.new("SoundGroup")
+grupo.Name = "Efectos"
+grupo.Volume = Config.VOLUMEN_GENERAL
+grupo.Parent = SoundService
+
+-- Ecualizador: saca lo agudo y lo mas "filoso" de los sonidos
+local ecualizador = Instance.new("EqualizerSoundEffect")
+ecualizador.LowGain = 0
+ecualizador.MidGain = -3
+ecualizador.HighGain = -12
+ecualizador.Parent = grupo
+
+-- Limitador: los picos fuertes se aplastan para que nada suene a gritos
+local limitador = Instance.new("CompressorSoundEffect")
+limitador.Threshold = -26
+limitador.Ratio = 10
+limitador.Attack = 0.005
+limitador.Release = 0.12
+limitador.Parent = grupo
 
 local EVENTOS = {
 	golpe = {
 		archivos = { "rbxasset://sounds/swordslash.wav", "rbxasset://sounds/unsheath.wav" },
-		volumen = 0.3,
-		tono = { 0.8, 1.0 },
+		volumen = 0.12,
+		tono = { 0.9, 1.1 },
 		espera = 0.1,
 	},
 	impacto = {
 		archivos = {
 			"rbxasset://sounds/collide.wav",
-			"rbxasset://sounds/bass.wav",
 			"rbxasset://sounds/snap.mp3",
 		},
-		volumen = 0.5,
-		tono = { 0.6, 0.85 },
-		espera = 0.08,
+		volumen = 0.16,
+		tono = { 0.7, 0.95 },
+		espera = 0.12,
 	},
 	cristal = {
 		archivos = {
 			"rbxasset://sounds/electronicpingshort.wav",
 			"rbxasset://sounds/clickfast.wav",
 		},
-		volumen = 0.5,
+		volumen = 0.2,
 		tono = { 1.3, 1.8 },
 		espera = 0.1,
 	},
@@ -38,19 +63,19 @@ local EVENTOS = {
 			"rbxasset://sounds/button.wav",
 			"rbxasset://sounds/snap.mp3",
 		},
-		volumen = 0.25,
+		volumen = 0.08,
 		tono = { 1.2, 1.7 },
-		espera = 0.06,
+		espera = 0.08,
 	},
 	moneda = {
 		archivos = { "rbxasset://sounds/button.wav", "rbxasset://sounds/clickfast.wav" },
-		volumen = 0.35,
+		volumen = 0.14,
 		tono = { 1.4, 1.6 },
 		espera = 0.1,
 	},
 	mejora = {
 		archivos = { "rbxasset://sounds/victory.wav", "rbxasset://sounds/electronicpingshort.wav" },
-		volumen = 0.5,
+		volumen = 0.22,
 		tono = { 1, 1 },
 		espera = 0.5,
 	},
@@ -66,6 +91,7 @@ local function preparar(nombre, datos)
 		local sonido = Instance.new("Sound")
 		sonido.SoundId = ruta
 		sonido.Volume = datos.volumen
+		sonido.SoundGroup = grupo
 		sonido.Parent = SoundService
 		pcall(function()
 			ContentProvider:PreloadAsync({ sonido })
@@ -96,10 +122,23 @@ local function reproducir(nombre)
 
 	local copia = base:Clone()
 	copia.PlaybackSpeed = azar:NextNumber(datos.tono[1], datos.tono[2])
+	copia.SoundGroup = grupo
 	copia.Parent = SoundService
 	copia:Play()
 	Debris:AddItem(copia, copia.TimeLength / copia.PlaybackSpeed + 0.5)
 end
+
+-- Tecla M: silenciar o volver a activar el sonido
+local silenciado = false
+UserInputService.InputBegan:Connect(function(entrada, procesado)
+	if procesado then
+		return
+	end
+	if entrada.KeyCode == Enum.KeyCode.M then
+		silenciado = not silenciado
+		grupo.Volume = if silenciado then 0 else Config.VOLUMEN_GENERAL
+	end
+end)
 
 function Sonidos.golpe()
 	reproducir("golpe")

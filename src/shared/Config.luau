@@ -50,6 +50,9 @@ return {
 	EVENTO_DURACION = 60, -- cuanto dura el x2 de monedas para todos
 	BONUS_PREMIUM = 1.2, -- multiplicador de monedas para jugadores con Roblox Premium
 
+	-- Sonido: volumen general de todos los efectos (0 a 1). Tecla M lo silencia.
+	VOLUMEN_GENERAL = 0.4,
+
 	-- Renacer (prestigio): reinicia todo pero da un multiplicador de monedas para siempre
 	FUERZA_PARA_RENACER = 10,
 	BONUS_POR_RENACER = 0.5, -- cada renacer suma +50% de monedas
