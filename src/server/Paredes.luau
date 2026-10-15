@@ -4,15 +4,35 @@ local Players = game:GetService("Players")
 
 local Paredes = {}
 
+-- Emisor de polvo marron. Rate = 0: solo suelta polvo cuando lo llamamos con :Emit()
+local function crearPolvo(padre)
+	local polvo = Instance.new("ParticleEmitter")
+	polvo.Color = ColorSequence.new(Color3.fromRGB(190, 160, 120))
+	polvo.Size = NumberSequence.new(2, 5)
+	polvo.Transparency = NumberSequence.new(0.3, 1)
+	polvo.Lifetime = NumberRange.new(0.6, 1.2)
+	polvo.Speed = NumberRange.new(6, 12)
+	polvo.SpreadAngle = Vector2.new(180, 180)
+	polvo.Rate = 0
+	polvo.Parent = padre
+	return polvo
+end
+
 local function soltarItems(posicion, cantidad)
 	for _ = 1, cantidad do
 		local item = Instance.new("Part")
 		item.Name = "Item"
 		item.Size = Vector3.new(1.5, 1.5, 1.5)
-		item.Color = Color3.fromRGB(150, 100, 50)
-		item.Material = Enum.Material.Wood
+		item.Color = Color3.fromRGB(190, 130, 60)
+		item.Material = Enum.Material.Neon
 		item.Position = posicion + Vector3.new(math.random(-3, 3), 4, math.random(-3, 3))
 		item.Parent = workspace
+
+		local luz = Instance.new("PointLight")
+		luz.Color = Color3.fromRGB(255, 200, 120)
+		luz.Range = 8
+		luz.Brightness = 1
+		luz.Parent = item
 
 		local recogido = false
 		item.Touched:Connect(function(otro)
@@ -38,6 +58,18 @@ end
 
 local function desmoronar(pared, profundidad)
 	local posicion = pared.Position
+
+	-- Nube de polvo grande
+	local nube = Instance.new("Part")
+	nube.Anchored = true
+	nube.CanCollide = false
+	nube.Transparency = 1
+	nube.Size = Vector3.new(1, 1, 1)
+	nube.Position = posicion
+	nube.Parent = workspace
+	crearPolvo(nube):Emit(40)
+	Debris:AddItem(nube, 3)
+
 	for _ = 1, 10 do
 		local pedazo = Instance.new("Part")
 		pedazo.Name = "Escombro"
@@ -60,6 +92,7 @@ function Paredes.prepararPared(pared, profundidad)
 	local vidaMaxima = 4 * profundidad
 	local vida = vidaMaxima
 	local destruida = false
+	local polvo = crearPolvo(pared)
 
 	local prompt = Instance.new("ProximityPrompt")
 	prompt.ActionText = "Golpear"
@@ -80,6 +113,7 @@ function Paredes.prepararPared(pared, profundidad)
 			prompt.Enabled = false
 			desmoronar(pared, profundidad)
 		else
+			polvo:Emit(8)
 			-- A medida que recibe golpes se va poniendo mas transparente
 			pared.Transparency = (1 - vida / vidaMaxima) * 0.6
 		end

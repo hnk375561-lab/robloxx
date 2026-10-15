@@ -45,7 +45,12 @@ Este archivo es la memoria del proyecto. Claude debe leerlo al empezar cada sesi
 - [x] Primer commit subido a GitHub
 - [ ] GitHub Actions (chequeos)
 - [ ] Primera publicacion del juego desde Studio y Open Cloud
-- [ ] Prototipo del juego: cuarto, paredes rompibles, items
+- [x] Prototipo: bosque de 4x4 habitaciones, paredes rompibles, items
+- [x] Trueque (items -> monedas) y Herreria (monedas -> fuerza), HUD de fuerza
+- [x] Mejora visual: Ambiente.luau (luz, niebla), arboles, flores, rocas, luciernagas, polvo al golpear paredes, titulo de entrada
+- [ ] Sonidos y musica (requieren IDs de assets de Roblox, a elegir)
+- [ ] Guardado de progreso (DataStore)
+- [ ] Armas, mas mejoras y monetizacion
 
 ## Decisiones tomadas
 - Se usa Rojo + Rokit en lugar de trabajar dentro de Studio.
