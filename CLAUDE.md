@@ -75,3 +75,9 @@ Este archivo es la memoria del proyecto. Claude debe leerlo al empezar cada sesi
 - Pulido.client.luau: vineta con 4 bordes en degradado, enfoque automatico (DepthOfField), modo liviano en celulares (sin SunRays ni DoF).
 - default.project.json: Lighting.Technology = Future. Si Rojo no lo aplica en vivo, ponerlo una vez a mano en Studio (Lighting > Technology).
 - Sigue sin haber sonidos ni modelos del Creator Store (hay que elegir IDs de audio de creador Roblox y 'Obtener' los modelos con la cuenta).
+
+
+## Mejora visual 4
+- Suelo.luau (servidor): tierra y barro bajo cada arbol, parches de tierra/barro/musgo en cada habitacion (FillCylinder sobre la capa superior del terreno).
+- Viento.client.luau: las copas (Hojas) y arbustos (Matas) se mecen con BulkMoveTo a 20 veces por segundo, solo en PC.
+- Efectos.client.luau: chispas y flash al romper cristales Neon, destello dorado al recoger fragmentos, linterna suave pegada a la camara (solo PC).
