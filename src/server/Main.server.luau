@@ -1,6 +1,8 @@
 -- Punto de entrada del servidor.
 local Ambiente = require(script.Parent.Ambiente)
 local Bosque = require(script.Parent.Bosque)
+local Combate = require(script.Parent.Combate)
+local Fragmentos = require(script.Parent.Fragmentos)
 local Jugadores = require(script.Parent.Jugadores)
 local Tienda = require(script.Parent.Tienda)
 
@@ -8,4 +10,6 @@ Ambiente.crear()
 Bosque.generar()
 Tienda.crear()
 Jugadores.iniciar()
+Fragmentos.iniciar()
+Combate.iniciar()
 print("Bosque generado")

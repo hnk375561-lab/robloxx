@@ -55,3 +55,10 @@ Este archivo es la memoria del proyecto. Claude debe leerlo al empezar cada sesi
 ## Decisiones tomadas
 - Se usa Rojo + Rokit en lugar de trabajar dentro de Studio.
 - Se descarta Wally por ahora para mantener todo simple.
+## Sistema de paredes y combate (voxeles, primera persona)
+- Camara en primera persona (Camara.client.luau), mira en el centro.
+- Las puertas entre habitaciones se generan como grilla de cubitos (Paredes.luau). Bosque.luau llama a Paredes.prepararPared y esa funcion reemplaza la pieza por voxeles. Cada voxel tiene atributos Vida, VidaMax, ColorBase, Valor y el tag "Voxel".
+- El cliente (Golpe.client.luau) apunta con raycast desde el centro de la pantalla y manda el voxel al servidor por el RemoteEvent "Golpear". El servidor (Combate.luau) valida tag, distancia y velocidad de golpes, y danya los voxeles dentro de un radio que crece con la Fuerza.
+- Al romperse, el voxel pasa a Workspace.Fragmentos (con fisica). Fragmentos.luau los atrae hacia el jugador (iman automatico) y los convierte en Items. Maximo 300 fragmentos, desaparecen a los 90 s.
+- Numeros de balance viven en src/shared/Config.luau.
+- Pendiente: sonidos (necesitan IDs del Creator Store), grietas con texturas (necesitan IDs), manos con arte mejor, guardado de progreso.
