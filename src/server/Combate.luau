@@ -59,12 +59,16 @@ function Combate.iniciar()
 		end
 		local radio = math.min(Config.RADIO_AREA + 0.35 * (fuerza - 1) + 0.15 * (arma - 1), 6)
 
+		local rotos = 0
 		for _, vecino in workspace:GetPartBoundsInRadius(parte.Position, radio, filtro) do
 			if CollectionService:HasTag(vecino, "Voxel") then
 				if Paredes.danar(vecino, dano) then
-					Misiones.sumar(jugador, 1)
+					rotos += 1
 				end
 			end
+		end
+		if rotos > 0 then
+			Misiones.sumar(jugador, rotos)
 		end
 	end)
 

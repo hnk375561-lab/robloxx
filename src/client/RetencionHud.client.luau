@@ -60,7 +60,7 @@ local function formatear(segundos)
 end
 
 local function actualizar()
-	local ahora = os.time()
+	local ahora = math.floor(workspace:GetServerTimeNow())
 
 	local momento = jugador:GetAttribute("RegaloEn") or 0
 	local indice = jugador:GetAttribute("RegaloIndice") or 1

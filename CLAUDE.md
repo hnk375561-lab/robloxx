@@ -88,3 +88,21 @@ Este archivo es la memoria del proyecto. Claude debe leerlo al empezar cada sesi
 - Flora.luau (servidor): helechos, tocones y hojas caidas por habitacion; ademas pone CanQuery=false a adornos chicos (flores, hongos, hojas, matas) para que no tapen el rayo de golpes.
 - Sonidos.luau (cliente, ModuleScript): sonidos rbxasset:// que vienen con el cliente de Roblox. Prueba cada archivo candidato y usa el primero que carga; si ninguno, queda en silencio sin error. Golpe.client.luau llama a Sonidos.golpe() y Sonidos.impacto().
 - Efectos.client.luau ahora tambien suena (cristal, recoger, monedas, mejora de fuerza).
+
+
+## Mejoras 6 a 10 (retencion y monetizacion)
+- Jugadores.luau: leaderstats Items, Monedas, Fuerza, Renacer. Atributos: Fuerza, Renacimientos, Arma, Dano, Multiplicador, PaseX2, PaseDano, PaseIman, BoostHasta. Jugadores.multiplicadorMonedas junta renacimientos, pase x2, boost, Evento Dorado y bonus Premium. Jugadores.avisar manda un cartel al cliente (RemoteEvent "Aviso").
+- Renacer.luau: altar en (12,0,0). Con fuerza 10 reinicia items, monedas y fuerza y suma +50% de monedas para siempre.
+- Armeria.luau: mesa en (0,0,12). Config.ARMAS tiene 6 armas que multiplican el dano. El dano real es el atributo "Dano" (fuerza x arma x pase).
+- Misiones.luau: misiones infinitas, la N pide 40*N cubitos y paga 150*N monedas (Config.MISION_META y MISION_PREMIO). Combate suma una sola vez por golpe.
+- Recompensa.luau: recompensa diaria con racha de 7 dias, se revisa al cargar los datos.
+- RegalosTiempo.luau: regalos a los 2, 5, 10, 20, 30 y 60 minutos de cada sesion (Config.REGALOS).
+- Eventos.luau: Evento Dorado, monedas x2 para todo el servidor 60 s cada 8 min (Config.EVENTO_*).
+- Monetizacion.luau: Game Passes y Developer Products. Los IDs se ponen en Config.luau (PASE_X2_MONEDAS, PASE_IMAN_GRANDE, PASE_DANO_X2, PRODUCTO_BOOST_30MIN, PRODUCTO_PACK_MONEDAS). Si un ID vale 0 ese producto no aparece. Los recibos se guardan en el DataStore "RobloxxRecibos_v1" para no entregar dos veces.
+- Guardado.luau guarda ahora tambien renacimientos, arma, mision, progreso de mision, racha, ultima recompensa y boost.
+- Cliente nuevo: Extra (multiplicador, avisos, boton TIENDA), ArmaHud, MisionHud, RetencionHud (regalo y banner del evento), Calidad (tecla G: Alta, Media, Baja).
+- Sonido: Sonidos.luau usa un SoundGroup con volumen general (Config.VOLUMEN_GENERAL), ecualizador y limitador. Tecla M silencia.
+- Graficos: Ambiente.luau con menos niebla y desenfoque, vineta suave, paredes mas claras. Lighting.Technology = Future se pone a mano en Studio si Rojo no lo aplica.
+- Las cuentas regresivas del cliente usan workspace:GetServerTimeNow() para no depender del reloj de la PC.
+- stylua.toml usa line_endings = "Unix" y hay .gitattributes con eol=lf.
+- Pendiente: crear los Game Passes y Developer Products en Creator Hub y pegar sus IDs; sonidos y musica con IDs propios; mascotas; tabla de lideres global.

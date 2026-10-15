@@ -51,9 +51,10 @@ local function actualizarInfo()
 	local mult = jugador:GetAttribute("Multiplicador") or 1
 	local renac = jugador:GetAttribute("Renacimientos") or 0
 	local boost = jugador:GetAttribute("BoostHasta") or 0
+	local ahora = math.floor(workspace:GetServerTimeNow())
 	local extra = ""
-	if boost > os.time() then
-		extra = string.format(" (boost %d min)", math.ceil((boost - os.time()) / 60))
+	if boost > ahora then
+		extra = string.format(" (boost %d min)", math.ceil((boost - ahora) / 60))
 	end
 	lineaMultiplicador.Text = string.format("Monedas x%.1f%s", mult, extra)
 	lineaRenacer.Text = string.format("Renacer: %d  (fuerza %d)", renac, Config.FUERZA_PARA_RENACER)
