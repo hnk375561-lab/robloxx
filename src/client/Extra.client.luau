@@ -147,7 +147,7 @@ if #ofertasActivas > 0 then
 
 	for k, oferta in ofertasActivas do
 		local compra = Instance.new("TextButton")
-		compra.Position = UDim2.new(0, 14, 0, 50 + (k - 1) * 56)
+		compra.Position = UDim2.fromOffset(14, 50 + (k - 1) * 56)
 		compra.Size = UDim2.new(1, -28, 0, 48)
 		compra.BackgroundColor3 = Color3.fromRGB(60, 110, 70)
 		compra.Text = oferta.nombre
