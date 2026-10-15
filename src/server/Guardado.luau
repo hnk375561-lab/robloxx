@@ -4,6 +4,9 @@
 local DataStoreService = game:GetService("DataStoreService")
 local Players = game:GetService("Players")
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local Config = require(ReplicatedStorage.Shared.Config)
 local Recompensa = require(script.Parent.Recompensa)
 
 local Guardado = {}
@@ -78,6 +81,7 @@ local function cargar(jugador)
 			numeroSeguro(datos.ultimaRecompensa, 0, 4102444800, 0)
 		)
 		jugador:SetAttribute("Racha", numeroSeguro(datos.racha, 0, 365, 0))
+		jugador:SetAttribute("Arma", numeroSeguro(datos.arma, 1, #Config.ARMAS, 1))
 		jugador:SetAttribute("BoostHasta", numeroSeguro(datos.boostHasta, 0, 4102444800, 0))
 	end
 	jugador:SetAttribute("DatosCargados", true)
@@ -107,6 +111,7 @@ local function guardar(jugador)
 		renacimientos = jugador:GetAttribute("Renacimientos") or 0,
 		ultimaRecompensa = jugador:GetAttribute("UltimaRecompensa") or 0,
 		racha = jugador:GetAttribute("Racha") or 0,
+		arma = jugador:GetAttribute("Arma") or 1,
 		boostHasta = jugador:GetAttribute("BoostHasta") or 0,
 	}
 	local ok, errorTexto = conReintentos(function()

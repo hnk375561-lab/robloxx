@@ -196,7 +196,10 @@ local function golpear()
 	if resultado then
 		remoto:FireServer(resultado.Instance)
 		chispas(resultado.Position, resultado.Instance.Color)
-		numeroFlotante(resultado.Position, "-" .. tostring(jugador:GetAttribute("Fuerza") or 1))
+		numeroFlotante(
+			resultado.Position,
+			"-" .. tostring(math.floor(jugador:GetAttribute("Dano") or 1))
+		)
 		fovExtra = 3.5
 		Sonidos.impacto()
 	end

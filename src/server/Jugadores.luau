@@ -27,6 +27,16 @@ function Jugadores.multiplicadorMonedas(jugador)
 	return total
 end
 
+-- Multiplicador de dano (arma x pase)
+function Jugadores.multiplicadorDano(jugador)
+	local indice = math.clamp(jugador:GetAttribute("Arma") or 1, 1, #Config.ARMAS)
+	local total = Config.ARMAS[indice].dano
+	if jugador:GetAttribute("PaseDano") then
+		total *= 2
+	end
+	return total
+end
+
 -- Manda un cartelito a la pantalla del jugador
 function Jugadores.avisar(jugador, texto)
 	-- Esperamos un poco para que la pantalla del jugador ya este lista para mostrarlo
@@ -39,6 +49,11 @@ end
 
 local function actualizarMultiplicador(jugador)
 	jugador:SetAttribute("Multiplicador", Jugadores.multiplicadorMonedas(jugador))
+end
+
+local function actualizarDano(jugador)
+	local fuerza = jugador:GetAttribute("Fuerza") or 1
+	jugador:SetAttribute("Dano", fuerza * Jugadores.multiplicadorDano(jugador))
 end
 
 local function alEntrar(jugador)
@@ -67,6 +82,7 @@ local function alEntrar(jugador)
 	-- La fuerza "de verdad" es el atributo. Lo usan las paredes y la tienda.
 	jugador:SetAttribute("Fuerza", 1)
 	jugador:SetAttribute("Renacimientos", 0)
+	jugador:SetAttribute("Arma", 1)
 	jugador:SetAttribute("CostoFuerza", Jugadores.costoDeFuerza(1))
 	jugador:GetAttributeChangedSignal("Fuerza"):Connect(function()
 		local actual = jugador:GetAttribute("Fuerza") or 1
@@ -90,6 +106,12 @@ local function alEntrar(jugador)
 			end
 		end)
 	end)
+	for _, nombre in { "Fuerza", "Arma", "PaseDano" } do
+		jugador:GetAttributeChangedSignal(nombre):Connect(function()
+			actualizarDano(jugador)
+		end)
+	end
+	actualizarDano(jugador)
 	actualizarMultiplicador(jugador)
 end
 

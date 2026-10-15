@@ -103,6 +103,7 @@ end)
 local OFERTAS = {
 	{ id = Config.PASE_X2_MONEDAS, pase = true, nombre = "Monedas x2 (para siempre)" },
 	{ id = Config.PASE_IMAN_GRANDE, pase = true, nombre = "Iman de doble alcance" },
+	{ id = Config.PASE_DANO_X2, pase = true, nombre = "Dano x2 (para siempre)" },
 	{ id = Config.PRODUCTO_BOOST_30MIN, pase = false, nombre = "Boost x2 por 30 minutos" },
 	{
 		id = Config.PRODUCTO_PACK_MONEDAS,

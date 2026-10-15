@@ -19,6 +19,9 @@ local function darPase(jugador, idPase)
 	if idPase == Config.PASE_X2_MONEDAS and idPase ~= 0 then
 		jugador:SetAttribute("PaseX2", true)
 		Jugadores.avisar(jugador, "Gracias! Monedas x2 para siempre")
+	elseif idPase == Config.PASE_DANO_X2 and idPase ~= 0 then
+		jugador:SetAttribute("PaseDano", true)
+		Jugadores.avisar(jugador, "Gracias! Tu dano es x2 para siempre")
 	elseif idPase == Config.PASE_IMAN_GRANDE and idPase ~= 0 then
 		jugador:SetAttribute("PaseIman", true)
 		Jugadores.avisar(jugador, "Gracias! Iman con el doble de alcance")
@@ -26,7 +29,7 @@ local function darPase(jugador, idPase)
 end
 
 local function revisarPases(jugador)
-	for _, idPase in { Config.PASE_X2_MONEDAS, Config.PASE_IMAN_GRANDE } do
+	for _, idPase in { Config.PASE_X2_MONEDAS, Config.PASE_IMAN_GRANDE, Config.PASE_DANO_X2 } do
 		if idPase ~= 0 then
 			local ok, lo_tiene = pcall(function()
 				return MarketplaceService:UserOwnsGamePassAsync(jugador.UserId, idPase)
