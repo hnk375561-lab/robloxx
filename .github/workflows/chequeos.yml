@@ -1,0 +1,24 @@
+name: Chequeos
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  chequeos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar herramientas (Rokit)
+        uses: CompeyDev/setup-rokit@v0.2.1
+
+      - name: Revisar formato (StyLua)
+        run: stylua --check src
+
+      - name: Revisar errores (Selene)
+        run: selene src
+
+      - name: Verificar que Rojo puede armar el juego
+        run: rojo build default.project.json --output prueba.rbxl
